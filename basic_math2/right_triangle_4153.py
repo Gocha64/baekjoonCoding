@@ -10,5 +10,6 @@ for i in triList:
     a, b, c = map(pow, i, [2]*len(i))
     if c == (a + b):
         print("right")
+
     else:
         print("wrong")
