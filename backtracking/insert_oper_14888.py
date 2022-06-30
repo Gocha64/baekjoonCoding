@@ -1,38 +1,58 @@
-n = int(input())
+aNum = int(input())
 
 aList = list(map(int,input().split()))
 
 # 덧셈, 뺼셈, 곱셈, 나눗셈 순서
 opCount = list(map(int,input().split()))
 
-opList = [-1] * (n-1)
+
+m = 1000000000
+M = -1000000000
+
+def cppDivide(a, b):
+
+    result = abs(a)//abs(b)
+
+    if bool(a < 0) ^ bool(b < 0):
+        return -result
+
+    return result
 
 
-m = 999999999999999999
-M= -9999999999999999
 
-def calculate():
-    result = aList[0]
-    for i in range(1, n-1):
-        if opList[i] == 0:
-            result += aList[i]
-        elif opList[i] == 1:
-            result -= aList[i]
-        elif opList[i] == 2:
-            result *= aList[i]
-        elif opList[i] == 3:
-            result //= aList[i]
+def calculate(n, result):
+    global m, M, opCount
 
-"""
-def dfs(k):
-    if k == n-1:
-        print(M)
-        print(m)
-        return
+    if n == aNum:
+        #print(f'result {result}')
+        m = min(m, result)
+        M = max(M, result)
 
-    for i in range(4):
-        if opCount[i] > 0:
-            opList[k] = i
-            opCount[i] -= 1
+    if opCount[0] > 0:
+        opCount[0] -= 1
+        #print("+", end = ' ')
+        calculate(n+1, result + aList[n])
+        opCount[0] += 1
 
-"""
+    if opCount[1] > 0:
+        opCount[1] -= 1
+        #print("-", end=' ')
+        calculate(n + 1, result - aList[n])
+        opCount[1] += 1
+
+    if opCount[2] > 0:
+        opCount[2] -= 1
+        #print("*", end=' ')
+        calculate(n + 1, result * aList[n])
+        opCount[2] += 1
+
+    if opCount[3] > 0:
+        opCount[3] -= 1
+        #print("/", end=' ')
+        calculate(n + 1, cppDivide(result, aList[n]))
+        opCount[3] += 1
+
+
+calculate(1, aList[0])
+print(M)
+print(m)
